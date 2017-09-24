@@ -1,13 +1,10 @@
-apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion rootProject.ext.androidCompileSdkVersion
     buildToolsVersion rootProject.ext.androidBuildToolsVersion
 
     defaultConfig {
-        applicationId    rootProject.ext.applicationId
         minSdkVersion    rootProject.ext.androidMinSdkVersion
         targetSdkVersion rootProject.ext.androidTargetSdkVersion
         versionCode      rootProject.ext.androidVersionCode
@@ -30,33 +27,27 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-
-    compile project(':common')
-    compile project(':data')
-    compile project(':domain')
-
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    compile 'com.android.support:appcompat-v7:26.+'
+    testCompile 'junit:junit:4.12'
 
-    def appDependencies = rootProject.ext.appDependencies
+    def commonDependencies = rootProject.ext.commonDependencies
 
-    apt appDependencies.daggerCompiler
-    compile appDependencies.dagger
+    compile commonDependencies.rxJava
+    compile commonDependencies.gson
 
-    compile appDependencies.supportAppcompatV7
-    compile appDependencies.supportConstraintConstraintLayout
+    // the annotations will be used like this: @NonNull
+    compile commonDependencies.androidAnnotations
+    compile commonDependencies.dagger
 
-    compile appDependencies.butterKnife
-    compile appDependencies.rxJava
-    compile (appDependencies.rxAndroid) {
+    // Retrofit
+    compile commonDependencies.retrofit
+    compile(commonDependencies.retrofitGsonConverter) {
+        exclude group: "com.google.code.gson", module: "gson"
+    }
+    compile(commonDependencies.retrofitRxJavaAdapter) {
         exclude group: 'io.reactivex', module: "rxjava"
     }
-
-    compile 'org.litepal.android:core:1.4.1'
-    compile 'com.squareup.okhttp3:okhttp:3.4.1'
-    compile 'com.google.code.gson:gson:2.7'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-
-    testCompile 'junit:junit:4.12'
 }

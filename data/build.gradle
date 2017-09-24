@@ -1,18 +1,23 @@
 apply plugin: 'com.android.library'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    compileSdkVersion rootProject.ext.androidCompileSdkVersion
+    buildToolsVersion rootProject.ext.androidBuildToolsVersion
 
     defaultConfig {
-        minSdkVersion 23
-        targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
-
+        minSdkVersion    rootProject.ext.androidMinSdkVersion
+        targetSdkVersion rootProject.ext.androidTargetSdkVersion
+        versionCode      rootProject.ext.androidVersionCode
+        versionName      rootProject.ext.androidVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -28,4 +33,28 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:26.+'
     testCompile 'junit:junit:4.12'
+
+    compile project(':common')
+
+    def dataDependencies = rootProject.ext.dataDependencies
+
+    compile dataDependencies.supportAppcompatV7
+
+    annotationProcessor dataDependencies.daggerCompiler
+    provided dataDependencies.javaxAnnotation
+    compile dataDependencies.dagger
+
+    compile dataDependencies.rxJava
+
+    compile dataDependencies.retrofit
+    compile (dataDependencies.retrofitGsonConverter) {
+        exclude group: "com.google.code.gson", module: "gson"
+    }
+    compile (dataDependencies.retrofitRxJavaAdapter) {
+        exclude group: 'io.reactivex', module: "rxjava"
+    }
+
+    annotationProcessor dataDependencies.storeioAnnotationsProcessor
+    compile dataDependencies.storeio
+    compile dataDependencies.storeioAnnotations
 }

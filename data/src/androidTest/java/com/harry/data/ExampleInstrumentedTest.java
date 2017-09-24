@@ -1,4 +1,4 @@
-package com.harry.db;
+package com.harry.data;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

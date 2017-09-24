@@ -1,4 +1,4 @@
-package com.harry.db;
+package com.harry.common;
 
 import org.junit.Test;
 
