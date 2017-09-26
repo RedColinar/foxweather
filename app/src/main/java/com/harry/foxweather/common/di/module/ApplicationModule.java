@@ -15,12 +15,12 @@ import dagger.Provides;
 @Module
 public class ApplicationModule {
     @Provides
-    CloudStore provideGroupCloudDataStore(CloudStoreImp cloudStoreImp) {
+    CloudStore provideCloudStore(CloudStoreImp cloudStoreImp) {
         cloudStoreImp.initializeRetrofitAPIs();
         return cloudStoreImp;
     }
     @Provides
-    DatabaseStore provideGroupCloudDataStore(DatabaseStoreImp databaseStoreImp) {
+    DatabaseStore providedatabaseStore(DatabaseStoreImp databaseStoreImp) {
         return databaseStoreImp;
     }
 }

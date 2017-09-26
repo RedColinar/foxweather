@@ -3,9 +3,9 @@ package com.harry.data.common.reactive;
 import android.content.Context;
 import android.support.annotation.StringRes;
 import android.util.Log;
-
+/*
 import com.augmentum.scrm.assistant.common.utility.StrUtil;
-import com.augmentum.scrm.assistant.data.R;
+import com.augmentum.scrm.assistant.data.R;*/
 import com.google.gson.Gson;
 
 import java.net.SocketException;
@@ -45,6 +45,7 @@ public abstract class HttpSubscriber<T> extends Subscriber<T> {
 
     }
 
+/*
     @Override
     public void onError(Throwable e) {
         e.printStackTrace();
@@ -135,5 +136,6 @@ public abstract class HttpSubscriber<T> extends Subscriber<T> {
     private String getErrorString(@StringRes int rid) {
         return context.getString(rid);
     }
+*/
 
 }
