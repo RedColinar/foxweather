@@ -1,4 +1,5 @@
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.harry.foxweather.R;
+import com.harry.foxweather.WeatherActivity;
 import com.harry.foxweather.db.City;
 import com.harry.foxweather.db.Country;
 import com.harry.foxweather.db.Province;
@@ -61,6 +63,9 @@ public class ChooseAreaFragment extends Fragment {
     private final String COUNTRY_TYPE = "country";
 
     private final String url = "http://guolin.tech/api/china/";
+    private final String weather1 = "https://free-api.heweather.com/v5/weather?city=%s&key=%s";
+    private final String weather2 = "http://guolin.tech/api/weather?cityid=%s&key=%s";
+    private static final String key = "f8c8dee47ed745c6bc109f1abfc13d13";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -86,6 +91,12 @@ public class ChooseAreaFragment extends Fragment {
                 } else if (currentLevel == LEVEL_CITY) {
                     seletedCity = cities.get(position);
                     queryCountries();
+                } else if (currentLevel == LEVEL_COUNTRY) {
+                    String weatherId = countries.get(position).getWeatherId();
+                    Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                    intent.putExtra("weather_id", weatherId);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
             }
         });

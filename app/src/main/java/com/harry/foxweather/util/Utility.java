@@ -2,9 +2,11 @@ package com.harry.foxweather.util;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.harry.foxweather.db.Country;
 import com.harry.foxweather.db.City;
 import com.harry.foxweather.db.Province;
+import com.harry.foxweather.gson.weatherData.Weather;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -71,5 +73,17 @@ public class Utility {
             }
         }
         return false;
+    }
+
+    public static Weather handleWeatherResponse(String response){
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+            String weatherContent = jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent, Weather.class);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
