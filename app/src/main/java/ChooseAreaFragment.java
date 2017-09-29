@@ -13,11 +13,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.harry.foxweather.MainActivity;
 import com.harry.foxweather.R;
 import com.harry.foxweather.WeatherActivity;
 import com.harry.foxweather.db.City;
 import com.harry.foxweather.db.Country;
 import com.harry.foxweather.db.Province;
+import com.harry.foxweather.gson.weatherData.Weather;
 import com.harry.foxweather.util.HttpUtil;
 import com.harry.foxweather.util.Utility;
 
@@ -93,10 +95,17 @@ public class ChooseAreaFragment extends Fragment {
                     queryCountries();
                 } else if (currentLevel == LEVEL_COUNTRY) {
                     String weatherId = countries.get(position).getWeatherId();
-                    Intent intent = new Intent(getActivity(), WeatherActivity.class);
-                    intent.putExtra("weather_id", weatherId);
-                    startActivity(intent);
-                    getActivity().finish();
+                    if (getActivity() instanceof MainActivity) {
+                        Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                        intent.putExtra("weather_id", weatherId);
+                        startActivity(intent);
+                        getActivity().finish();
+                    } else if (getActivity() instanceof WeatherActivity) {
+                        WeatherActivity activity = (WeatherActivity) getActivity();
+                        activity.drawerLayout.closeDrawers();
+                        activity.swipeRefreshLayout.setRefreshing(true);
+                        activity.requestWeather(weatherId);
+                    }
                 }
             }
         });
