@@ -20,6 +20,7 @@ import com.harry.foxweather.db.City;
 import com.harry.foxweather.db.Country;
 import com.harry.foxweather.db.Province;
 import com.harry.foxweather.gson.weatherData.Weather;
+import com.harry.foxweather.http.HttpManager;
 import com.harry.foxweather.util.HttpUtil;
 import com.harry.foxweather.util.Utility;
 
@@ -29,6 +30,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -44,9 +47,14 @@ public class ChooseAreaFragment extends Fragment {
     public static final int LEVEL_COUNTRY = 2;
 
     private ProgressDialog progressDialog;
-    private TextView titleText;
-    private Button backButton;
-    private ListView listView;
+    //@BindView(R.id.title_text)
+    public TextView titleText;
+
+    //@BindView(R.id.back_button)
+    public Button backButton;
+
+    //@BindView(R.id.list_view)
+    public ListView listView;
 
     private ArrayAdapter<String> adapter;
     private List<String> dataList = new ArrayList<>();
@@ -75,6 +83,7 @@ public class ChooseAreaFragment extends Fragment {
         titleText = (TextView) view.findViewById(R.id.title_text);
         backButton = (Button) view.findViewById(R.id.back_button);
         listView = (ListView) view.findViewById(R.id.list_view);
+        //ButterKnife.bind(this, view);
         adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, dataList);
         listView.setAdapter(adapter);
         return view;
@@ -110,14 +119,11 @@ public class ChooseAreaFragment extends Fragment {
             }
         });
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (currentLevel == LEVEL_COUNTRY) {
-                    queryCities();
-                } else if (currentLevel == LEVEL_CITY) {
-                    queryProvicnes();
-                }
+        backButton.setOnClickListener((View v) -> {
+            if (currentLevel == LEVEL_COUNTRY) {
+                queryCities();
+            } else if (currentLevel == LEVEL_CITY) {
+                queryProvicnes();
             }
         });
         queryProvicnes();
@@ -139,6 +145,20 @@ public class ChooseAreaFragment extends Fragment {
         } else {
             String address = url;
             queryFromServer(address, PROVINCE_TYPE);
+
+            /*retrofit2.Call<List<Province>> call = HttpManager.getInstantce().provincesHttp.get();
+            call.enqueue(new retrofit2.Callback<List<Province>>() {
+                @Override
+                public void onResponse(retrofit2.Call<List<Province>> call, retrofit2.Response<List<Province>> response) {
+
+                }
+
+                @Override
+                public void onFailure(retrofit2.Call<List<Province>> call, Throwable t) {
+                    t.printStackTrace();
+                }
+            });*/
+            //DataSupport.saveAll(provinceResponse);
         }
     }
 

@@ -48,6 +48,7 @@ public class Utility {
                     city.setCityName(cityObject.getString("name"));
                     city.save();
                 }
+                return true;
             } catch (JSONException e) {
                 e.printStackTrace();
             }
