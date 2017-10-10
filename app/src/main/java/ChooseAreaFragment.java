@@ -1,7 +1,6 @@
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +18,6 @@ import com.harry.foxweather.WeatherActivity;
 import com.harry.foxweather.db.City;
 import com.harry.foxweather.db.Country;
 import com.harry.foxweather.db.Province;
-import com.harry.foxweather.gson.weatherData.Weather;
-import com.harry.foxweather.http.HttpManager;
 import com.harry.foxweather.util.HttpUtil;
 import com.harry.foxweather.util.Utility;
 
@@ -30,8 +27,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;

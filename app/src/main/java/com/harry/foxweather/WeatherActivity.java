@@ -1,6 +1,5 @@
 package com.harry.foxweather;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -24,7 +23,6 @@ import com.harry.foxweather.gson.weatherData.Forecast;
 import com.harry.foxweather.gson.weatherData.Weather;
 import com.harry.foxweather.util.HttpUtil;
 import com.harry.foxweather.util.Utility;
-
 
 import java.io.IOException;
 
