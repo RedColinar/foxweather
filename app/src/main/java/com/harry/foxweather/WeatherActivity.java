@@ -1,5 +1,6 @@
 package com.harry.foxweather;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -64,6 +65,8 @@ public class WeatherActivity extends AppCompatActivity {
 
     public ImageView bingPicImg;
 
+    public Button staticsButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +92,7 @@ public class WeatherActivity extends AppCompatActivity {
         bingPicImg = (ImageView) findViewById(R.id.bing_pic_img);
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
         navButton = (Button) findViewById(R.id.nav_button);
+        staticsButton = (Button) findViewById(R.id.statics_button);
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
@@ -109,6 +113,13 @@ public class WeatherActivity extends AppCompatActivity {
         }
         swipeRefreshLayout.setOnRefreshListener(() -> requestWeather(mWeatherId));
         navButton.setOnClickListener((View v) -> drawerLayout.openDrawer(GravityCompat.START));
+
+        staticsButton.setText(R.string.statics);
+        staticsButton.setOnClickListener((View v) -> {
+            Intent intent = new Intent(this, WeatherStaticsActivity.class);
+            startActivity(intent);
+            // finish();
+        });
 
         if (bingPic != null) {
             Glide.with(this).load(bingPic).into(bingPicImg);
