@@ -6,9 +6,9 @@ package com.harry.foxweather.gson.weatherData;
 
 public class AQI {
     /*
-      "aqi": {
+      "weather_aqi": {
         "city": {
-          "aqi": "60",
+          "weather_aqi": "60",
           "co": "0",
           "no2": "14",
           "o3": "95",

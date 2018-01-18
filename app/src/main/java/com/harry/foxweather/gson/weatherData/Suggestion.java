@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by Harry on 2017/9/28.
  */
-/*"suggestion": {
+/*"weather_suggestion": {
         "comf": {
           "brf": "较舒适",
           "txt": "白天天气晴好，您在这种天气条件下，会感觉早晚凉爽、舒适，午后偏热。"

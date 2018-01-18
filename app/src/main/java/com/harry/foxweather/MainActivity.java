@@ -18,6 +18,11 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, WeatherActivity.class);
             startActivity(intent);
             finish();
+        } else {
+            // 动态加载选择地址碎片
+            getSupportFragmentManager().beginTransaction()
+                .add(R.id.main, new ChooseAreaFragment(), "areaTag")
+                .commit();
         }
     }
 }

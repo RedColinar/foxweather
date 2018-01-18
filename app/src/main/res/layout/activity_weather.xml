@@ -34,11 +34,11 @@
                     android:layout_height="wrap_content"
                     android:fitsSystemWindows="true">
 
-                    <include layout="@layout/title"/>
-                    <include layout="@layout/now"/>
-                    <include layout="@layout/forecast"/>
-                    <include layout="@layout/aqi"/>
-                    <include layout="@layout/suggestion"/>
+                    <include layout="@layout/weather_title"/>
+                    <include layout="@layout/weather_now"/>
+                    <include layout="@layout/weather_forecast"/>
+                    <include layout="@layout/weather_aqi"/>
+                    <include layout="@layout/weather_suggestion"/>
 
                 </LinearLayout>
 
@@ -48,7 +48,7 @@
 
         <fragment
             android:id="@+id/choose_area_fragment"
-            android:name="ChooseAreaFragment"
+            android:name="com.harry.foxweather.ChooseAreaFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="start" />
