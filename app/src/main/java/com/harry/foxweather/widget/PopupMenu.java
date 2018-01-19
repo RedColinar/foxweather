@@ -2,6 +2,7 @@ package com.harry.foxweather.widget;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,10 +50,12 @@ public class PopupMenu extends PopupWindow {
                 public boolean onTouch(View v, MotionEvent event) {
                     switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
+                            // 点下触发
                             v.setBackgroundColor(mMenuItemHoverBgColor);
                             break;
                         case MotionEvent.ACTION_UP:
-                            v.setBackgroundColor(mMenuItemBgColor);
+                            // 离开触发
+                            // v.setBackgroundColor(mMenuItemBgColor);
                             dismiss();
                             if (mListener != null) {
                                 mListener.onMenuItemSelected(v);
@@ -68,7 +71,7 @@ public class PopupMenu extends PopupWindow {
         }
     }
 
-    public void show(View anchor, int xoff, int yoff) {
+    public void showAsDropDown(View anchor, int xoff, int yoff) {
         super.showAsDropDown(anchor, xoff, yoff);
     }
 

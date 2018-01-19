@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -26,46 +27,35 @@ import com.harry.foxweather.util.HttpUtil;
 import com.harry.foxweather.util.Utility;
 
 import java.io.IOException;
+import java.util.Date;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
 public class WeatherActivity extends AppCompatActivity {
-
-    public DrawerLayout drawerLayout;
-
-    public Button navButton;
-
-    public SwipeRefreshLayout swipeRefreshLayout;
-
     private String mWeatherId;
+    int oneDayLong = 24 * 60 * 60 * 1000;
 
-    public ScrollView weatherLayout;
+    @BindView(R.id.bing_pic_img) public ImageView bingPicImg;
+    @BindView(R.id.nav_button) public Button navButton;
+    @BindView(R.id.statics_button) public Button staticsButton;
+    @BindView(R.id.weather_layout) public ScrollView weatherLayout;
+    @BindView(R.id.title_city) public TextView titleCity;
+    @BindView(R.id.title_update_time) public TextView titleUpdateTime;
+    @BindView(R.id.degree_text) public TextView degreeText;
+    @BindView(R.id.weather_info_text) public TextView weatherInfoText;
+    @BindView(R.id.aqi_text) public TextView aqiText;
+    @BindView(R.id.pm25_text) public TextView pm25Text;
+    @BindView(R.id.comfort_text) public TextView comfortText;
+    @BindView(R.id.car_wash_text) public TextView carWashText;
+    @BindView(R.id.sport_text) public TextView sportText;
 
-    public TextView titleCity;
-
-    public TextView titleUpdateTime;
-
-    public TextView degreeText;
-
-    public TextView weatherInfoText;
-
-    public LinearLayout forecastLayout;
-
-    public TextView aqiText;
-
-    public TextView pm25Text;
-
-    public TextView comfortText;
-
-    public TextView carWashText;
-
-    public TextView sportText;
-
-    public ImageView bingPicImg;
-
-    public Button staticsButton;
+    @BindView(R.id.forecast_layout) public LinearLayout forecastLayout;
+    @BindView(R.id.drawer_layout) public DrawerLayout drawerLayout;
+    @BindView(R.id.swipe_refresh) public SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,33 +68,23 @@ public class WeatherActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_weather);
 
-        weatherLayout = (ScrollView) findViewById(R.id.weather_layout);
-        titleCity = (TextView) findViewById(R.id.title_city);
-        titleUpdateTime = (TextView) findViewById(R.id.title_update_time);
-        degreeText = (TextView) findViewById(R.id.degree_text);
-        weatherInfoText = (TextView) findViewById(R.id.weather_info_text);
-        forecastLayout = (LinearLayout) findViewById(R.id.forecast_layout);
-        aqiText = (TextView) findViewById(R.id.aqi_text);
-        pm25Text = (TextView) findViewById(R.id.pm25_text);
-        comfortText = (TextView) findViewById(R.id.comfort_text);
-        carWashText = (TextView) findViewById(R.id.car_wash_text);
-        sportText = (TextView) findViewById(R.id.sport_text);
-        bingPicImg = (ImageView) findViewById(R.id.bing_pic_img);
-        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        navButton = (Button) findViewById(R.id.nav_button);
-        staticsButton = (Button) findViewById(R.id.statics_button);
+        ButterKnife.bind(this);
 
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String weatherString = prefs.getString("weather", null);
         String bingPic = prefs.getString("bing_pic", null);
+        long lastUpdatePic = prefs.getLong("last_update_pic", 0);
+        boolean moreThanOneDay = (new Date().getTime() - lastUpdatePic) >= oneDayLong;
+
         if (weatherString != null) {
             // 有缓存时直接解析天气数据
             Weather weather = Utility.handleWeatherResponse(weatherString);
-            mWeatherId = weather.basic.weatherId;
-            showWeatherInfo(weather);
+            if (weather != null) {
+                mWeatherId = weather.basic.weatherId;
+                showWeatherInfo(weather);
+            }
         } else {
             // 无缓存时去服务器查询天气
             mWeatherId = getIntent().getStringExtra("weather_id");
@@ -121,10 +101,13 @@ public class WeatherActivity extends AppCompatActivity {
             // finish();
         });
 
-        if (bingPic != null) {
+        if (bingPic != null && !moreThanOneDay) {
             Glide.with(this).load(bingPic).into(bingPicImg);
         } else {
             loadBingPic();
+            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this).edit();
+            editor.putLong("last_update_pic", new Date().getTime());
+            editor.apply();
         }
     }
 
@@ -135,7 +118,7 @@ public class WeatherActivity extends AppCompatActivity {
         String weatherUrl = "http://guolin.tech/api/weather?cityid=" + weatherId + "&key=f8c8dee47ed745c6bc109f1abfc13d13";
         HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 final String responseText = response.body().string();
                 final Weather weather = Utility.handleWeatherResponse(responseText);
                 runOnUiThread(() -> {
@@ -153,7 +136,7 @@ public class WeatherActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 e.printStackTrace();
                 runOnUiThread(() -> {
                         Toast.makeText(WeatherActivity.this, "获取天气信息失败", Toast.LENGTH_SHORT).show();
@@ -168,7 +151,6 @@ public class WeatherActivity extends AppCompatActivity {
      * 加载必应每日一图
      */
     private void loadBingPic() {
-        String requestBingPic = "http://guolin.tech/api/bing_pic";
         String bingPic = "http://area.sinaapp.com/bingImg/";
         runOnUiThread(() -> Glide.with(WeatherActivity.this).load(bingPic).into(bingPicImg));
     }
@@ -209,5 +191,10 @@ public class WeatherActivity extends AppCompatActivity {
         carWashText.setText(carWash);
         sportText.setText(sport);
         weatherLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

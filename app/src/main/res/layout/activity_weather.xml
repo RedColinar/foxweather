@@ -34,7 +34,7 @@
                     android:layout_height="wrap_content"
                     android:fitsSystemWindows="true">
 
-                    <include layout="@layout/weather_title"/>
+                    <include layout="@layout/weather_title" />
                     <include layout="@layout/weather_now"/>
                     <include layout="@layout/weather_forecast"/>
                     <include layout="@layout/weather_aqi"/>
